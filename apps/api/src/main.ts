@@ -22,7 +22,8 @@ async function bootstrap() {
   );
 
   const port = Number(process.env.PORT ?? 4000);
-  await app.listen(port);
+  // En production, HOST=127.0.0.1 : seul Caddy, sur la même machine, joint l'API.
+  await app.listen(port, process.env.HOST ?? '0.0.0.0');
   console.log(`API Spiro RDC : http://localhost:${port}/api`);
 }
 

@@ -1,0 +1,3 @@
+# Les scripts et la config Caddy tournent sur Linux : fins de ligne LF obligatoires.
+*.sh text eol=lf
+Caddyfile text eol=lf

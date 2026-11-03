@@ -1,0 +1,32 @@
+# Caddy : HTTPS automatique (Let's Encrypt) et relais vers le site et l'API.
+# Remplacez spiro.example.com par votre domaine. Sans domaine, remplacez-le
+# par :80 (le site sera alors en HTTP simple, sans certificat).
+
+spiro.example.com {
+	encode zstd gzip
+
+	# L'API directement, sans repasser par Next.
+	handle /api/* {
+		reverse_proxy 127.0.0.1:4000
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:3001
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	log {
+		output file /var/log/caddy/spiro.log
+	}
+}
+
+# www.spiro.example.com redirige vers le domaine principal.
+www.spiro.example.com {
+	redir https://spiro.example.com{uri} permanent
+}
